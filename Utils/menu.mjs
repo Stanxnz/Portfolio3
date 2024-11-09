@@ -1,8 +1,6 @@
 import { ANSI } from "../utils/ansi.mjs";
 import KeyBoardManager, { clearScreen } from "../utils/io.mjs";
 import { print, printCenterd } from "../utils/io.mjs";
-import { LANGUAGES } from "./language.mjs";
-
 
 let currentActiveMenuItem = 0
 let menuItemCount = 0;
@@ -10,13 +8,7 @@ let menuItemCount = 0;
 /*
 */
 
-function createMenu(menuItems, currentLanguage = 'en') {
-    let currentActiveMenuItem = 0;
-
-    function t(key){
-        return LANGUAGES[currentLanguage][key] || key;
-    }
-
+function createMenu(menuItems) {
     return {
         isDrawn: false,
         next: null,
@@ -69,7 +61,7 @@ function createMenu(menuItems, currentLanguage = 'en') {
             }
         }
 
-    };
+    }
 }
 
 

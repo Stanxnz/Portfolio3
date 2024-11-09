@@ -1,11 +1,12 @@
 import { ANSI } from "./utils/ansi.mjs";
 import { print, clearScreen } from "./utils/io.mjs";
-import {SplashScreen} from "./game/splash.mjs";
+import SplashScreen from "./game/splash.mjs";
 import { FIRST_PLAYER, SECOND_PLAYER } from "./consts.mjs";
 import createMenu from "./utils/menu.mjs";
 import createMapLayoutScreen from "./game/mapLayoutScreen.mjs";
 import createInnBetweenScreen from "./game/innbetweenScreen.mjs";
 import createBattleshipScreen from "./game/battleshipsScreen.mjs";
+import { setLanguage, translate } from "./utils/language.mjs";
 
 const MAIN_MENU_ITEMS = buildMenu();
 const MIN_WIDTH = 80;
@@ -18,10 +19,10 @@ let mainMenuScene = null;
 
 function checkResolution() {
     if (process.stdout.columns < MIN_WIDTH) {
-        console.log("Your console width is too low to start the game. Please resize your console window.");
+        console.log(translate("resolutionError"));
         return false; 
     } else if (process.stdout.rows < MIN_HEIGHT) {
-        console.log("Your console height is too low to start the game. Please resize your console window.");
+        console.log(translate("resolutionError"));
         return false; 
     }
     return true; 
@@ -30,7 +31,7 @@ function checkResolution() {
 
 (function initialize() {
     if (!checkResolution()) {
-        console.log("Game cannot start due to insufficient resolution.");
+        console.log("Game cannot start because your resolution is too low.");
         return; 
     }
 
@@ -44,6 +45,7 @@ function checkResolution() {
     SplashScreen.next = mainMenuScene;
     currentState = SplashScreen  
     gameLoop = setInterval(update, GAME_FPS); 
+    setLanguage('en');
 })();
 
 function update() {
@@ -55,40 +57,81 @@ function update() {
     }
 }
 
+
 // Suport / Utility functions ---------------------------------------------------------------
+function promptForLanguageChange() {
+    clearScreen();
+    console.log("Select a language:");
+    console.log("1. English");
+    console.log("2. Dutch");
+
+    // Use `process.stdin` to capture user input
+    process.stdin.once('data', (input) => {
+        const choice = input.toString().trim();
+        
+        if (choice === '1') {
+            setLanguage('en');
+        } else if (choice === '2') {
+            setLanguage('nl');
+        } else {
+            console.log("Invalid choice. Defaulting to English.");
+            setLanguage('en');
+        }
+
+        // Rebuild and show the updated menu
+        mainMenuScene = createMenu(buildMenu());
+        currentState = mainMenuScene;
+    });
+}
+
 
 function buildMenu() {
     let menuItemCount = 0;
     return [
         {
-            text: "Start Game", id: menuItemCount++, action: function () {
+            text: translate("startGame"), // Translates "Start Game" or "Start Spel"
+            id: menuItemCount++,
+            action: function () {
                 clearScreen();
                 let innbetween = createInnBetweenScreen();
-                innbetween.init(`SHIP PLACMENT\nFirst player get ready.\nPlayer two look away`, () => {
+                innbetween.init(translate("shipPlacementPrompt1"), () => {
 
                     let p1map = createMapLayoutScreen();
                     p1map.init(FIRST_PLAYER, (player1ShipMap) => {
 
-
                         let innbetween = createInnBetweenScreen();
-                        innbetween.init(`SHIP PLACMENT\nSecond player get ready.\nPlayer one look away`, () => {
+                        innbetween.init(translate("shipPlacementPrompt2"), () => {
                             let p2map = createMapLayoutScreen();
                             p2map.init(SECOND_PLAYER, (player2ShipMap) => {
                                 return createBattleshipScreen(player1ShipMap, player2ShipMap);
-                            })
+                            });
                             return p2map;
                         });
                         return innbetween;
                     });
 
                     return p1map;
-
                 }, 3);
                 currentState.next = innbetween;
                 currentState.transitionTo = "Map layout";
             }
         },
-        { text: "Exit Game", id: menuItemCount++, action: function () { print(ANSI.SHOW_CURSOR); clearScreen(); process.exit(); } },
+        {
+            text: translate("changeLanguage"), // Translates "Change Language" or "Wijzig Taal"
+            id: menuItemCount++,
+            action: function () {
+                promptForLanguageChange();
+            }
+        },
+        {
+            text: translate("exitGame"), // Translates "Exit Game" or "Afsluiten Spel"
+            id: menuItemCount++,
+            action: function () {
+                print(ANSI.SHOW_CURSOR);
+                clearScreen();
+                process.exit();
+            }
+        },
     ];
 }
 

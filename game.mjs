@@ -1,6 +1,6 @@
 import { ANSI } from "./utils/ansi.mjs";
 import { print, clearScreen } from "./utils/io.mjs";
-import SplashScreen from "./game/splash.mjs";
+import {SplashScreen} from "./game/splash.mjs";
 import { FIRST_PLAYER, SECOND_PLAYER } from "./consts.mjs";
 import createMenu from "./utils/menu.mjs";
 import createMapLayoutScreen from "./game/mapLayoutScreen.mjs";
@@ -8,20 +8,42 @@ import createInnBetweenScreen from "./game/innbetweenScreen.mjs";
 import createBattleshipScreen from "./game/battleshipsScreen.mjs";
 
 const MAIN_MENU_ITEMS = buildMenu();
-
-const GAME_FPS = 1000 / 60; // The theoretical refresh rate of our game engine
-let currentState = null;    // The current active state in our finite-state machine.
-let gameLoop = null;        // Variable that keeps a refrence to the interval id assigned to our game loop 
+const MIN_WIDTH = 80;
+const MIN_HEIGHT = 24;
+const GAME_FPS = 1000 / 60;
+let currentState = null;   
+let gameLoop = null;       
 
 let mainMenuScene = null;
+
+function checkResolution() {
+    if (process.stdout.columns < MIN_WIDTH) {
+        console.log("Your console width is too low to start the game. Please resize your console window.");
+        return false; 
+    } else if (process.stdout.rows < MIN_HEIGHT) {
+        console.log("Your console height is too low to start the game. Please resize your console window.");
+        return false; 
+    }
+    return true; 
+}
+
+
+(function initialize() {
+    if (!checkResolution()) {
+        console.log("Game cannot start due to insufficient resolution.");
+        return; 
+    }
+
+})();
+
 
 (function initialize() {
     print(ANSI.HIDE_CURSOR);
     clearScreen();
     mainMenuScene = createMenu(MAIN_MENU_ITEMS);
     SplashScreen.next = mainMenuScene;
-    currentState = SplashScreen  // This is where we decide what state our finite-state machine will start in. 
-    gameLoop = setInterval(update, GAME_FPS); // The game is started.
+    currentState = SplashScreen  
+    gameLoop = setInterval(update, GAME_FPS); 
 })();
 
 function update() {

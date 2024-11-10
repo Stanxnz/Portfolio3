@@ -125,47 +125,47 @@ function createMapLayoutScreen() {
 
             clearScreen();
 
-            let output = `${ANSI.TEXT.BOLD}${ANSI.COLOR.YELLOW}${translate("shipPlacementPhase")}\n\n${ANSI.TEXT.BOLD_OFF}${ANSI.RESET}`;
-            output += '  ';
+            let output = ANSI.TEXT.BOLD + ANSI.COLOR.YELLOW + translate("shipPlacementPhase") + "\n\n" + ANSI.TEXT.BOLD_OFF + ANSI.RESET;
+            output += "  ";
             for (let i = 0; i < GAME_BOARD_DIM; i++) {
-                output += ` ${String.fromCharCode(65 + i)}`;
+                output += " " + String.fromCharCode(65 + i);
             }
-            output += '\n';
+            output += "\n";
 
             for (let y = 0; y < GAME_BOARD_DIM; y++) {
-                output += `${String(y + 1).padStart(2, ' ')} `;
+                output += String(y + 1).padStart(2, ' ') + " ";
                 for (let x = 0; x < GAME_BOARD_DIM; x++) {
                     const cell = this.map[y][x];
                     const isInShipPreview = this.isPositionInShipPreview(x, y);
 
                     if (isInShipPreview && this.canPlaceShip()) {
-                        output += ANSI.COLOR.GREEN + '█' + ANSI.RESET + ' ';
+                        output += ANSI.COLOR.GREEN + "█" + ANSI.RESET + " ";
                     } else if (isInShipPreview) {
-                        output += ANSI.COLOR.WHITE + '█' + ANSI.RESET + ' ';
+                        output += ANSI.COLOR.WHITE + "█" + ANSI.RESET + " ";
                     } else if (cell !== 0) {
-                        output += ANSI.SEA__AND_SHIP + cell + ANSI.RESET + ' ';
+                        output += ANSI.SEA__AND_SHIP + cell + ANSI.RESET + " ";
                     } else {
-                        output += ANSI.SEA + ' ' + ANSI.RESET + ' ';
+                        output += ANSI.SEA + " " + ANSI.RESET + " ";
                     }
                 }
-                output += `${y + 1}\n`;
+                output += (y + 1) + "\n";
             }
 
-            output += '  ';
+            output += "  ";
             for (let i = 0; i < GAME_BOARD_DIM; i++) {
-                output += ` ${String.fromCharCode(65 + i)}`;
+                output += " " + String.fromCharCode(65 + i);
             }
-            output += '\n\n';
+            output += "\n\n";
 
-            output += `${ANSI.TEXT.BOLD}${ANSI.COLOR.YELLOW}${translate("controls")}:${ANSI.TEXT.BOLD_OFF}${ANSI.RESET}\n`;
-            output += `${translate("controlsArrowKeys")}\n`;
-            output += `${translate("controlsRotate")}\n`;
-            output += `${translate("controlsEnter")}\n`;
+            output += ANSI.TEXT.BOLD + ANSI.COLOR.YELLOW + translate("controls") + ":" + ANSI.TEXT.BOLD_OFF + ANSI.RESET + "\n";
+            output += translate("controlsArrowKeys") + "\n";
+            output += translate("controlsRotate") + "\n";
+            output += translate("controlsEnter") + "\n";
 
-            output += `\n${ANSI.TEXT.BOLD}${ANSI.COLOR.YELLOW}${translate("shipsToPlace")}:${ANSI.TEXT.BOLD_OFF}${ANSI.RESET}\n`;
+            output += "\n" + ANSI.TEXT.BOLD + ANSI.COLOR.YELLOW + translate("shipsToPlace") + ":" + ANSI.TEXT.BOLD_OFF + ANSI.RESET + "\n";
             this.ships.forEach((ship, index) => {
-                const status = index < this.currentShipIndex ? '✓' : index === this.currentShipIndex ? '>' : ' ';
-                output += `${status} ${ship.id()} (${ship.size} ${translate("spaces")})\n`;
+                const status = index < this.currentShipIndex ? "✓" : index === this.currentShipIndex ? ">" : " ";
+                output += status + " " + ship.id() + " (" + ship.size + " " + translate("spaces") + ")\n";
             });
 
             print(output);

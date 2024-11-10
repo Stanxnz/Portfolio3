@@ -18,7 +18,12 @@ const LANGUAGES = {
         shipBattleship: "Battleship",
         shipCruiser: "Cruiser",
         shipSubmarine: "Submarine",
-        shipDestroyer: "Destroyer"
+        shipDestroyer: "Destroyer",
+        playerTurn: "Player Turn",
+        hit: "Hit!",
+        miss: "Miss!",
+        winMessage: "Congratulations! You've won the game!",
+        controlsEnterFire: "Enter: Fire at target"
     },
     nl: {
         startGame: "Start Spel",
@@ -39,7 +44,12 @@ const LANGUAGES = {
         shipBattleship: "Slagschip",
         shipCruiser: "Kruiser",
         shipSubmarine: "Onderzeeër",
-        shipDestroyer: "Torpedobootjager"
+        shipDestroyer: "Torpedobootjager",
+        playerTurn: "Beurt Speler",
+        hit: "Raak!",
+        miss: "Mis!",
+        winMessage: "Gefeliciteerd! Je hebt het spel gewonnen!",
+        controlsEnterFire: "Enter: Vuur op doelwit"
     }
 };
 

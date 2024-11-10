@@ -57,15 +57,12 @@ function update() {
     }
 }
 
-
-// Suport / Utility functions ---------------------------------------------------------------
 function promptForLanguageChange() {
     clearScreen();
     console.log("Select a language:");
     console.log("1. English");
     console.log("2. Dutch");
 
-    // Use `process.stdin` to capture user input
     process.stdin.once('data', (input) => {
         const choice = input.toString().trim();
         
@@ -78,7 +75,6 @@ function promptForLanguageChange() {
             setLanguage('en');
         }
 
-        // Rebuild and show the updated menu
         mainMenuScene = createMenu(buildMenu());
         currentState = mainMenuScene;
     });
@@ -89,7 +85,7 @@ function buildMenu() {
     let menuItemCount = 0;
     return [
         {
-            text: translate("startGame"), // Translates "Start Game" or "Start Spel"
+            text: translate("startGame"), 
             id: menuItemCount++,
             action: function () {
                 clearScreen();
@@ -117,14 +113,14 @@ function buildMenu() {
             }
         },
         {
-            text: translate("changeLanguage"), // Translates "Change Language" or "Wijzig Taal"
+            text: translate("changeLanguage"), 
             id: menuItemCount++,
             action: function () {
                 promptForLanguageChange();
             }
         },
         {
-            text: translate("exitGame"), // Translates "Exit Game" or "Afsluiten Spel"
+            text: translate("exitGame"), 
             id: menuItemCount++,
             action: function () {
                 print(ANSI.SHOW_CURSOR);

@@ -1,4 +1,4 @@
-import { GAME_BOARD_DIM } from "../consts.mjs";
+import { GAME_BOARD_DIM, FIRST_PLAYER, SECOND_PLAYER } from "../consts.mjs";
 import { ANSI } from "../utils/ansi.mjs";
 import { print, clearScreen } from "../utils/io.mjs";
 import units from "./units.mjs";
@@ -8,6 +8,11 @@ import { translate } from "../utils/language.mjs";
 
 ANSI.SEA__AND_SHIP = '\x1b[38;5;83;48;5;39m';
 ANSI.SEA = '\x1b[48;5;39m';
+
+let firstPlayerBoard = { ships: create2DArrayWithFill(GAME_BOARD_DIM) };
+let secondPlayerBoard = { ships: create2DArrayWithFill(GAME_BOARD_DIM) };
+let firstPlayerDone = false;
+let secondPlayerDone = false;
 
 function createMapLayoutScreen() {
     const MapLayout = {
@@ -27,6 +32,14 @@ function createMapLayoutScreen() {
         init: function (player, transitionFn) {
             this.player = player;
             this.transitionFn = transitionFn;
+
+            this.cursorColumn = 0;
+            this.cursorRow = 0;
+            this.currentShipIndex = 0;
+            this.map = create2DArrayWithFill(GAME_BOARD_DIM);
+
+            const playerLabel = player === FIRST_PLAYER ? translate("firstPlayer") : translate("secondPlayer");
+            console.log(translate("initializingMapLayout") + " " + playerLabel);
         },
 
         canPlaceShip: function () {
@@ -80,6 +93,23 @@ function createMapLayoutScreen() {
                 return column === this.cursorColumn &&
                     row >= this.cursorRow &&
                     row < this.cursorRow + ship.size;
+            }
+        },
+
+        finalizePlayerBoard: function () {
+            if (this.player === FIRST_PLAYER) {
+                firstPlayerBoard.ships = this.map;
+                firstPlayerDone = true;
+            } else if (this.player === SECOND_PLAYER) {
+                secondPlayerBoard.ships = this.map;
+                secondPlayerDone = true;
+            }
+
+            if (firstPlayerDone && secondPlayerDone) {
+                this.transitionFn(firstPlayerBoard, secondPlayerBoard);
+            } else {
+                this.player = this.player === FIRST_PLAYER ? SECOND_PLAYER : FIRST_PLAYER;
+                this.init(this.player, this.transitionFn);
             }
         },
 

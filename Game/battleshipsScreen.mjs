@@ -14,9 +14,14 @@ const createBattleshipScreen = () => {
 
     function swapPlayer() {
         currentPlayer *= -1;
-        [currentBoard, opponentBoard] = currentPlayer === FIRST_PLAYER
-            ? [firstPlayerBoard, secondPlayerBoard]
-            : [secondPlayerBoard, firstPlayerBoard];
+        if (currentPlayer === FIRST_PLAYER) {
+            currentBoard = firstPlayerBoard;
+            opponentBoard = secondPlayerBoard;
+        } else {
+            currentBoard = secondPlayerBoard;
+            opponentBoard = firstPlayerBoard;
+        }
+        console.log(translate("switchedPlayer") + ": " + (currentPlayer === FIRST_PLAYER ? translate("firstPlayer") : translate("secondPlayer")));
     }
 
     function checkWinCondition(board) {
@@ -29,10 +34,18 @@ const createBattleshipScreen = () => {
         transitionTo: null,
 
         init: function (firstPBoard, secondPBoard) {
+            if (!firstPBoard || !firstPBoard.ships || !secondPBoard || !secondPBoard.ships) {
+                console.error(translate("errorBoardNotInitialized"));
+                return;
+            }
             firstPlayerBoard = firstPBoard;
             secondPlayerBoard = secondPBoard;
             currentBoard = firstPlayerBoard;
             opponentBoard = secondPlayerBoard;
+
+            console.log(translate("initializedBattleScreen"));
+            console.log(translate("firstPlayerBoard") + ":", firstPlayerBoard);
+            console.log(translate("secondPlayerBoard") + ":", secondPlayerBoard);
         },
 
         update: function (dt) {
@@ -59,6 +72,10 @@ const createBattleshipScreen = () => {
         },
 
         fireAtPosition: function () {
+            if (!opponentBoard || !opponentBoard.ships) {
+                console.error(translate("errorOpponentBoardNotInitialized"));
+                return;
+            }
             const targetCell = opponentBoard.ships[cursorRow][cursorColumn];
             if (targetCell === "X" || targetCell === "O") {
                 return; 
@@ -84,7 +101,7 @@ const createBattleshipScreen = () => {
             this.isDrawn = true;
 
             clearScreen();
-            print(translate("playerTurn") + ": " + (currentPlayer === FIRST_PLAYER ? "Player 1" : "Player 2") + "\n\n");
+            print(translate("playerTurn") + ": " + (currentPlayer === FIRST_PLAYER ? translate("firstPlayer") : translate("secondPlayer")) + "\n\n");
 
             let output = "  ";
             for (let i = 0; i < GAME_BOARD_DIM; i++) {
@@ -95,10 +112,11 @@ const createBattleshipScreen = () => {
             for (let row = 0; row < GAME_BOARD_DIM; row++) {
                 output += String(row + 1).padStart(2, ' ') + " ";
                 for (let col = 0; col < GAME_BOARD_DIM; col++) {
+                    const cellContent = opponentBoard && opponentBoard.ships ? opponentBoard.ships[row][col] : " ";
                     if (row === cursorRow && col === cursorColumn) {
-                        output += "[" + (opponentBoard.ships[row][col] || " ") + "] ";
+                        output += "[" + (cellContent || " ") + "] ";
                     } else {
-                        output += " " + (opponentBoard.ships[row][col] || " ") + "  ";
+                        output += " " + (cellContent || " ") + "  ";
                     }
                 }
                 output += " " + (row + 1) + "\n";

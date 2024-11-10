@@ -23,7 +23,18 @@ const LANGUAGES = {
         hit: "Hit!",
         miss: "Miss!",
         winMessage: "Congratulations! You've won the game!",
-        controlsEnterFire: "Enter: Fire at target"
+        controlsEnterFire: "Enter: Fire at target",
+        initializingMapLayout: "Initializing map layout for",
+        firstPlayer: "First Player",
+        secondPlayer: "Second Player",
+        switchedPlayer: "Switched player",
+        firstPlayer: "First Player",
+        secondPlayer: "Second Player",
+        errorBoardNotInitialized: "Error: One or both player boards are not properly initialized",
+        initializedBattleScreen: "Initialized battleshipsScreen with:",
+        firstPlayerBoard: "First Player Board",
+        secondPlayerBoard: "Second Player Board",
+        errorOpponentBoardNotInitialized: "Error: Opponent board is not initialized"
     },
     nl: {
         startGame: "Start Spel",
@@ -49,7 +60,18 @@ const LANGUAGES = {
         hit: "Raak!",
         miss: "Mis!",
         winMessage: "Gefeliciteerd! Je hebt het spel gewonnen!",
-        controlsEnterFire: "Enter: Vuur op doelwit"
+        controlsEnterFire: "Enter: Vuur op doelwit",
+        initializingMapLayout: "Initialiseren van kaartlay-out voor",
+        firstPlayer: "Eerste Speler",
+        secondPlayer: "Tweede Speler",
+        switchedPlayer: "Speler gewisseld",
+        firstPlayer: "Eerste Speler",
+        secondPlayer: "Tweede Speler",
+        errorBoardNotInitialized: "Fout: Een of beide spelersborden zijn niet correct geïnitialiseerd",
+        initializedBattleScreen: "battleshipsScreen geïnitialiseerd met:",
+        firstPlayerBoard: "Eerste Speler Bord",
+        secondPlayerBoard: "Tweede Speler Bord",
+        errorOpponentBoardNotInitialized: "Fout: Tegenstanderbord is niet geïnitialiseerd"
     }
 };
 

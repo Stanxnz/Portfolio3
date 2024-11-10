@@ -3,7 +3,7 @@ import { print, clearScreen } from "./utils/io.mjs";
 import SplashScreen from "./game/splash.mjs";
 import { FIRST_PLAYER, SECOND_PLAYER } from "./consts.mjs";
 import createMenu from "./utils/menu.mjs";
-import createMapLayoutScreen from "./game/mapLayoutScreen.mjs";
+import createMapLayoutScreen from "./Game/mapLayoutScreen.mjs";
 import createInnBetweenScreen from "./game/innbetweenScreen.mjs";
 import createBattleshipScreen from "./game/battleshipsScreen.mjs";
 import { setLanguage, translate } from "./utils/language.mjs";
